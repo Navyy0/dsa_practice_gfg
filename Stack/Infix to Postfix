@@ -1,0 +1,86 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.lang.*;
+import java.util.*;
+
+class GFG {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine().trim());
+        while (t-- > 0) {
+            System.out.println(new Solution().infixToPostfix(br.readLine().trim()));
+
+            System.out.println("~");
+        }
+    }
+}
+// } Driver Code Ends
+
+
+class Solution {
+    // Function to convert an infix expression to a postfix expression.
+   public static String infixToPostfix(String s) {
+    Stack<String> val = new Stack<>();
+    Stack<Character> op = new Stack<>();
+
+    for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+
+        if (Character.isLetterOrDigit(c)) { // Allow both letters and digits as operands.
+            val.push(Character.toString(c));
+        } else if (c == '(') { // If the character is an opening parenthesis.
+            op.push(c);
+        } else if (c == ')') { // If the character is a closing parenthesis.
+            while (!op.isEmpty() && op.peek() != '(') {
+                String v2 = val.pop();
+                String v1 = val.pop();
+                char o = op.pop();
+                String t = v1 + v2 + o;
+                val.push(t);
+            }
+                op.pop(); // Remove the opening parenthesis.
+            
+            }
+        else if (isOperator(c)) { // If the character is an operator.
+            while (!op.isEmpty() && precedence(op.peek()) >= precedence(c)) {
+                String v2 = val.pop();
+                String v1 = val.pop();
+                char o = op.pop();
+                String t = v1 + v2 + o;
+                val.push(t);
+            }
+            op.push(c);
+        } else {
+            return "Invalid Expression"; // Invalid character.
+        }
+    }
+
+    // Process remaining operators in the stack.
+    while (!op.isEmpty()) {
+        String v2 = val.pop();
+        String v1 = val.pop();
+        char o = op.pop();
+        String t = v1 + v2 + o;
+        val.push(t);
+    }
+
+    // If the stack doesn't contain exactly one element, it's invalid.
+    return val.size() == 1 ? val.pop() : "Invalid Expression";
+}
+
+// Helper function to check if a character is an operator.
+private static boolean isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
+}
+
+// Helper function to define operator precedence.
+private static int precedence(char c) {
+    if (c == '+' || c == '-') return 1;
+    if (c == '*' || c == '/') return 2;
+    if (c == '^') return 3; // Higher precedence for exponentiation.
+    return -1;
+}
+
+
+}
