@@ -1,0 +1,108 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.util.*;
+
+
+class IntArray
+{
+    public static int[] input(BufferedReader br, int n) throws IOException
+    {
+        String[] s = br.readLine().trim().split(" ");
+        int[] a = new int[n];
+        for(int i = 0; i < n; i++)
+            a[i] = Integer.parseInt(s[i]);
+
+        return a;
+    }
+
+    public static void print(int[] a)
+    {
+        for(int e : a)
+            System.out.print(e + " ");
+        System.out.println();
+    }
+
+    public static void print(ArrayList<Integer> a)
+    {
+        for(int e : a)
+            System.out.print(e + " ");
+        System.out.println();
+    }
+}
+
+class GFG {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t;
+        t = Integer.parseInt(br.readLine());
+        while(t-- > 0){
+            
+            int N;
+            N = Integer.parseInt(br.readLine());
+            
+            
+            int[] a = IntArray.input(br, N);
+            Queue<Integer> q=new LinkedList<>();
+            for(int i:a)q.add(i);
+            
+            Solution obj = new Solution();
+            ArrayList<Integer> res = obj.rearrangeQueue(N, q);
+            
+            IntArray.print(res);
+            
+        
+System.out.println("~");
+}
+    }
+}
+
+// } Driver Code Ends
+
+
+
+class Solution {
+    public static ArrayList<Integer> rearrangeQueue(int N, Queue<Integer> q) {
+        // code here
+       Stack<Integer> s = new Stack<>();
+    int halfSize = N / 2;
+
+    // Push the first half of the queue into the stack
+    for (int i = 0; i < halfSize; i++) {
+        s.push(q.poll());
+    }
+
+    // Add the elements from the stack back to the queue (reversing the first half)
+    while (!s.empty()) {
+        q.add(s.pop());
+    }
+
+    // Rotate the remaining elements in the queue to maintain the order
+    for (int i = 0; i < halfSize; i++) {
+        s.push(q.poll());
+    }
+
+  
+   
+    while (!s.empty()) {
+        q.add(s.pop()); // Add one element from the stack
+        q.add(q.poll()); // Add one element from the queue
+    }
+      while(q.size()>0){
+            s.push(q.poll());
+        }
+        while(s.size()>0){
+            q.add(s.pop());
+        }
+
+    // Store the result in an ArrayList
+    ArrayList<Integer> result = new ArrayList<>();
+    while (!q.isEmpty()) {
+        result.add(q.poll());
+    }
+
+    return result;
+        
+        
+    }
+}
+        
