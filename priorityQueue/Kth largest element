@@ -1,0 +1,19 @@
+  public static int KthLargest(int arr[], int k) {
+        // Your code here
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        
+        for(int i = 0 ; i<arr.length ; i++){
+            if(pq.size() == k){
+                if(pq.peek() < arr[i]){
+                    pq.poll();
+                    pq.add(arr[i]);
+                }
+                continue;
+               
+            }
+             else{
+                     pq.add(arr[i]);
+                }
+        }
+        return pq.peek();
+    }
