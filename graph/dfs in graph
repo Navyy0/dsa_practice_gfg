@@ -1,0 +1,20 @@
+    private void dfs(int node, ArrayList<ArrayList<Integer>> adj, boolean[] vis, ArrayList<Integer> result) {
+        vis[node] = true;
+        result.add(node);
+
+        for (int neighbor : adj.get(node)) {
+            if (!vis[neighbor]) {
+                dfs(neighbor, adj, vis, result);
+            }
+        }
+    }
+
+    public ArrayList<Integer> dfsOfGraph(ArrayList<ArrayList<Integer>> adj) {
+        int V = adj.size();
+        boolean[] vis = new boolean[V];
+        ArrayList<Integer> result = new ArrayList<>();
+
+        // Start DFS from node 0
+        dfs(0, adj, vis, result);
+        return result;
+    }
