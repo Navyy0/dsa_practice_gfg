@@ -1,0 +1,29 @@
+class Solution {
+    public boolean isBipartite(ArrayList<ArrayList<Integer>> adj) {
+      int V = adj.size();
+      int[] vis = new int[V];
+        Arrays.fill(vis, -1);
+        Queue<Integer> q = new LinkedList<>();
+        
+        for (int node = 0; node < V; node++) {
+            if (vis[node] == -1) {
+                
+                q.add(node);
+                vis[node] = 0;
+                
+                while (!q.isEmpty()) {
+                    int curr = q.poll();
+                    for (int neighbor : adj.get(curr)) {
+                        if (vis[neighbor] == -1) {
+                            vis[neighbor] = 1 - vis[curr];
+                            q.add(neighbor);
+                        } else if (vis[neighbor] == vis[curr]) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+}
