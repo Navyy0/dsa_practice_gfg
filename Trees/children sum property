@@ -1,0 +1,38 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+
+class Solution {
+    // Function to check whether all nodes of a tree have the value
+    // equal to the sum of their child nodes.
+    public static int isSumProperty(Node root) {
+        if (root == null) {
+            return 1;
+        }
+
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+
+        while (!q.isEmpty()) {
+            Node temp = q.poll();
+            int sum = 0;
+
+            if (temp.left != null) {
+                sum += temp.left.data;
+                q.add(temp.left);
+            }
+
+            if (temp.right != null) {
+                sum += temp.right.data;
+                q.add(temp.right);
+            }
+
+            // Check if the current node is not a leaf and if the sum property is violated
+            if ((temp.left != null || temp.right != null) && temp.data != sum) {
+                return 0;
+            }
+        }
+
+        return 1;
+    }
+}
