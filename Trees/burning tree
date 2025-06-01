@@ -1,0 +1,65 @@
+import java.util.*;
+
+class Solution {
+    // Store parent mapping as a class field
+    private static Map<Node, Node> parent = new HashMap<>();
+    
+    private static void preorder(Node curr, Node par) {
+        if (curr == null) return;
+        
+        parent.put(curr, par);
+        preorder(curr.left, curr);
+        preorder(curr.right, curr);
+    }
+    
+    // Helper method to find the target node
+    private static Node findTargetNode(Node root, int target) {
+        if (root == null) return null;
+        if (root.data == target) return root;
+        
+        Node left = findTargetNode(root.left, target);
+        if (left != null) return left;
+        
+        return findTargetNode(root.right, target);
+    }
+    
+    public static int minTime(Node root, int target) {
+        // Build parent mapping
+        preorder(root, null);
+        
+        // Find the target node
+        Node targetNode = findTargetNode(root, target);
+        if (targetNode == null) return 0; // target not found
+        
+        Queue<Node> q = new LinkedList<>();
+        q.add(targetNode);
+        Set<Node> visited = new HashSet<>();
+        visited.add(targetNode);
+        
+        int count = -1; // Initialize count
+        
+        while (!q.isEmpty()) {
+            count++;
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                Node curr = q.poll();
+                
+                if (curr.left != null && !visited.contains(curr.left)) {
+                    q.add(curr.left);
+                    visited.add(curr.left);
+                }
+                if (curr.right != null && !visited.contains(curr.right)) {
+                    q.add(curr.right);
+                    visited.add(curr.right);
+                }
+                Node par = parent.get(curr);
+                if (par != null && !visited.contains(par)) {
+                    q.add(par);
+                    visited.add(par);
+                }
+            }
+        }
+        
+        return count;
+    }
+}
