@@ -1,0 +1,31 @@
+class Solution {
+    static Boolean isSubsetSum(int arr[], int sum) {
+        int n = arr.length;
+        boolean[][] dp = new boolean[n + 1][sum + 1];
+
+        // Initialize the first column as true, since sum 0 is always possible with empty subset
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = true;
+        }
+
+        // Initialize the first row (except dp[0][0]) as false, since sum > 0 can't be achieved with no elements
+        for (int j = 1; j <= sum; j++) {
+            dp[0][j] = false;
+        }
+ 
+        // Fill the DP table
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= sum; j++) {
+                // If the current element is greater than the current sum, we can't include it
+                if (arr[i - 1] > j && dp[i - 1][j]) {
+                    dp[i][j] = true ;
+                } else if(arr[i - 1] <= j && (dp[i - 1][j] || dp[i - 1][j - arr[i - 1]]) ) {
+                    // Check if sum can be achieved by either including or excluding the current element
+                    dp[i][j] = true ;
+                }
+            }
+        }
+
+        return dp[n][sum];
+    }
+}
